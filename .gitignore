@@ -1,0 +1,50 @@
+# Arduino build artifacts
+*.hex
+*.elf
+*.eep
+*.lss
+*.map
+*.sym
+*.o
+*.a
+*.d
+
+# Build directories
+build/
+_build_temp/
+
+# Arduino IDE files
+*.ino.with_bootloader.hex
+
+# Python virtual environments
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# MCP server venv (keep the server code but not venv)
+.mcp/arduino-server/venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Zone Identifier files (Windows)
+*:Zone.Identifier
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.backup

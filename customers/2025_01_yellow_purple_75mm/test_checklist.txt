@@ -1,0 +1,304 @@
+================================================================================
+TESTING CHECKLIST - YELLOW/PURPLE 75MM DRONE LED CONTROLLER
+================================================================================
+
+Customer: Yellow/Purple 75mm Drone
+Firmware: yellow_purple_75mm_led_controller.ino v1.0
+Date: _____________
+Tester: _____________
+
+--------------------------------------------------------------------------------
+PRE-TEST SETUP
+--------------------------------------------------------------------------------
+
+□ Hardware connections verified:
+  □ ATtiny85 programmed and installed
+  □ Strip 1 (18 LEDs) connected to PB0 (pin 5)
+  □ Strip 2 (18 LEDs) connected to PB4 (pin 3)
+  □ 5V power connected (adequate current rating)
+  □ Ground connected
+  □ PWM input connected to PB2 (pin 7)
+  □ Sanity test pin PB3 (pin 2) accessible
+
+□ Test equipment ready:
+  □ Bench power supply (5V, >2A recommended)
+  □ Servo tester or PWM signal generator
+  □ Multimeter for voltage checks
+  □ Test button/wire for sanity mode
+
+□ Compilation verified:
+  Sketch uses _____ bytes (____%) of program storage space (max 8192)
+  Global variables use _____ bytes (____%) of RAM (max 512) ← MUST BE <512!
+  
+--------------------------------------------------------------------------------
+SANITY MODE TEST (Automatic Mode Cycling)
+--------------------------------------------------------------------------------
+
+□ Pull PB3 (pin 2) to ground for 100ms
+□ Observe white blink on entry (indicates sanity mode activated)
+□ Verify modes cycle automatically every 1 second:
+  
+  Time 0s: Mode 1 - Yellow Spinning Blocks
+  □ Yellow color correct
+  □ Spinning animation visible
+  □ Brightness gradient visible (bright → dim)
+  □ Seamless across both strips
+  
+  Time 1s: Mode 2 - Purple/Yellow Fading Blocks
+  □ Purple color correct (128, 0, 255)
+  □ Yellow color correct (255, 255, 0)
+  □ Blocks rotate
+  □ Colors fade/morph smoothly
+  
+  Time 2s: Mode 3 - Alternating Pulse
+  □ Front strip shows yellow
+  □ Rear strip shows purple
+  □ Breathing effect smooth
+  □ Opposite phases visible (one bright when other dim)
+  
+  Time 3s: Mode 4 - Police Lights
+  □ Red/blue alternating
+  □ White center section
+  □ Emergency pattern recognizable
+  □ Both strips have different patterns
+  
+  Time 4s: Cycles back to Mode 1
+  □ Cycle continues smoothly
+
+□ Release PB3 (return pin high for 100ms)
+□ Controller exits sanity mode and returns to normal operation
+
+Sanity Mode Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+--------------------------------------------------------------------------------
+PWM MODE SELECTION TEST (Normal Operation)
+--------------------------------------------------------------------------------
+
+Test each PWM range with servo tester:
+
+POWER OFF MODE (<1000µs)
+□ Set PWM to 500µs
+  □ All LEDs turn off immediately
+  □ No flicker or residual glow
+□ Set PWM to 900µs
+  □ All LEDs remain off
+  
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+MODE 1: Yellow Spinning Blocks (1000-1249µs)
+□ Set PWM to 1000µs (lower bound)
+  □ Mode activates correctly
+□ Set PWM to 1125µs (mid-range)
+  □ Pattern stable and smooth
+  Test visuals:
+  □ Yellow color accurate (255, 255, 0)
+  □ Bright section at 70% brightness
+  □ Fade to 30% brightness visible
+  □ Rotation smooth (no stuttering)
+  □ Both strips act as continuous ring
+  □ 6-LED bright block visible
+  □ Gradient fade spans ~12 LEDs
+□ Set PWM to 1249µs (upper bound)
+  □ Mode remains stable
+  
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+MODE 2: Purple/Yellow Fading Blocks (1250-1499µs)
+□ Set PWM to 1250µs (lower bound - transition from Mode 1)
+  □ Clean transition, no glitch
+□ Set PWM to 1375µs (mid-range)
+  □ Pattern stable
+  Test visuals:
+  □ Purple blocks visible (128, 0, 255)
+  □ Yellow blocks visible (255, 255, 0)
+  □ 50% brightness consistent
+  □ Blocks rotate around strips
+  □ Color morphing smooth (no harsh transitions)
+  □ 6-LED block size correct
+  □ Fade cycle ~1 second duration
+□ Set PWM to 1499µs (upper bound)
+  □ Mode remains stable
+  
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+MODE 3: Alternating Pulse (1500-1749µs)
+□ Set PWM to 1500µs (lower bound - transition from Mode 2)
+  □ Clean transition, no glitch
+□ Set PWM to 1625µs (mid-range)
+  □ Pattern stable
+  Test visuals:
+  □ Front strip pulses yellow
+  □ Rear strip pulses purple
+  □ Colors accurate
+  □ Breathing effect smooth (sine wave)
+  □ Opposite phases clearly visible
+  □ One strip bright while other dim
+  □ Minimum brightness ~20%
+  □ Maximum brightness ~78%
+  □ "Heartbeat" effect recognizable
+□ Set PWM to 1749µs (upper bound)
+  □ Mode remains stable
+  
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+MODE 4: Police Lights (1750-2000µs)
+□ Set PWM to 1750µs (lower bound - transition from Mode 3)
+  □ Clean transition, no glitch
+□ Set PWM to 1875µs (mid-range)
+  □ Pattern stable
+  Test visuals:
+  □ Red color visible (178, 0, 0)
+  □ Blue color visible (0, 0, 178)
+  □ White center section flashing
+  □ 8-stage cycle progressing
+  □ First 7 LEDs show red/blue pattern
+  □ Middle 4 LEDs show white strobe
+  □ Last 7 LEDs show inverse pattern
+  □ Strip 2 colors inverted from Strip 1
+  □ Emergency pattern recognizable
+  □ Stage timing ~22ms (fast flashing)
+□ Set PWM to 2000µs (upper bound)
+  □ Mode remains stable
+  
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+--------------------------------------------------------------------------------
+TRANSITION TESTS (Mode Switching)
+--------------------------------------------------------------------------------
+
+□ Slowly sweep PWM from 1000µs to 2000µs
+  □ All mode transitions are clean
+  □ No flickering during transitions
+  □ Debouncing working (no rapid mode switching)
+
+□ Rapidly switch between modes
+  □ Controller handles rapid changes
+  □ No crashes or hangs
+  □ LEDs always respond correctly
+
+□ Test boundary conditions:
+  □ 999µs → 1001µs (OFF to Mode 1)
+  □ 1249µs → 1251µs (Mode 1 to Mode 2)
+  □ 1499µs → 1501µs (Mode 2 to Mode 3)
+  □ 1749µs → 1751µs (Mode 3 to Mode 4)
+
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+--------------------------------------------------------------------------------
+STRESS TESTS
+--------------------------------------------------------------------------------
+
+□ Continuous operation test (5 minutes minimum):
+  □ No LED glitches
+  □ No overheating (touch ATtiny85)
+  □ Patterns remain stable
+  □ No memory leaks (patterns don't degrade)
+
+□ Power cycle test (3 cycles):
+  □ Controller boots correctly each time
+  □ Starts in power-off mode
+  □ Responds to PWM input immediately
+
+□ PWM signal loss test:
+  □ Disconnect PWM input
+  □ Controller enters power-off mode
+  □ Reconnect PWM
+  □ Controller responds correctly
+
+Result: □ PASS  □ FAIL
+Notes: _______________________________________________________________
+
+--------------------------------------------------------------------------------
+VISUAL QUALITY ASSESSMENT
+--------------------------------------------------------------------------------
+
+Rate each mode on visual quality (1-5 scale, 5=excellent):
+
+Mode 1 (Yellow Spinning Blocks):
+Visual Appeal: _____ / 5
+Smoothness: _____ / 5
+Color Accuracy: _____ / 5
+Brightness: _____ / 5
+Comments: _______________________________________________________________
+
+Mode 2 (Purple/Yellow Fading Blocks):
+Visual Appeal: _____ / 5
+Smoothness: _____ / 5
+Color Accuracy: _____ / 5
+Color Morphing: _____ / 5
+Comments: _______________________________________________________________
+
+Mode 3 (Alternating Pulse):
+Visual Appeal: _____ / 5
+Smoothness: _____ / 5
+Color Accuracy: _____ / 5
+Heartbeat Effect: _____ / 5
+Comments: _______________________________________________________________
+
+Mode 4 (Police Lights):
+Visual Appeal: _____ / 5
+Effect Recognition: _____ / 5
+Color Accuracy: _____ / 5
+Flash Rate: _____ / 5
+Comments: _______________________________________________________________
+
+--------------------------------------------------------------------------------
+MEMORY & PERFORMANCE
+--------------------------------------------------------------------------------
+
+□ Actual RAM usage: _____ bytes (from compilation output)
+  □ Confirm <512 bytes: □ PASS  □ FAIL
+
+□ Flash usage: _____ bytes (from compilation output)
+  □ Confirm <8192 bytes: □ PASS  □ FAIL
+
+□ Animation frame rates:
+  Mode 1: Measured _____ fps (target: ~40 fps)
+  Mode 2: Measured _____ fps (target: ~20 fps)
+  Mode 3: Measured _____ fps (target: ~50 fps)
+  Mode 4: Measured _____ fps (target: ~45 fps)
+
+□ No visible stuttering or lag in any mode
+
+Result: □ PASS  □ FAIL
+
+--------------------------------------------------------------------------------
+FINAL VERIFICATION
+--------------------------------------------------------------------------------
+
+□ All 4 modes function correctly
+□ PWM ranges all working
+□ Sanity mode works
+□ No memory issues
+□ No overheating
+□ Visual quality acceptable
+□ Ready for customer delivery
+
+OVERALL RESULT: □ PASS  □ FAIL
+
+If FAIL, describe issues: _____________________________________________
+______________________________________________________________________
+______________________________________________________________________
+
+--------------------------------------------------------------------------------
+SIGN-OFF
+--------------------------------------------------------------------------------
+
+Tested by: _____________________  Date: ______________
+Approved by: ___________________  Date: ______________
+
+Customer delivery authorized: □ YES  □ NO
+
+Delivery date: ______________
+Tracking/Method: _____________________________________________
+
+================================================================================
+END TEST CHECKLIST
+================================================================================

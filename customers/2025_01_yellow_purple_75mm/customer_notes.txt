@@ -1,0 +1,158 @@
+================================================================================
+CUSTOMER PROFILE - YELLOW/PURPLE 75MM DRONE
+================================================================================
+
+Customer ID: 2025_01
+Date Created: 2025-11-01
+Firmware Version: v1.2 (Seamless Animations + Faster Rainbow)
+
+--------------------------------------------------------------------------------
+DRONE SPECIFICATIONS
+--------------------------------------------------------------------------------
+Drone Type: 75mm racing quad (whoop)
+Frame Color: Yellow
+Canopy Color: Purple
+LED Configuration: 2x 18 WS2812B strips (36 LEDs total)
+  - Strip 1 (Front): 18 LEDs on PB0 (pin 5)
+  - Strip 2 (Rear): 18 LEDs on PB4 (pin 3)
+
+--------------------------------------------------------------------------------
+MODE REQUIREMENTS
+--------------------------------------------------------------------------------
+
+MODE 1: Yellow Spinning Blocks (PWM: 1000-1249µs)
+  Description: Bright yellow blocks spin around the drone perimeter
+  Pattern: Both strips act as one continuous 36-LED ring
+  Colors: Yellow (255, 255, 0)
+  Brightness: 70% at peak, fading to 30% at valley
+  Animation: Smooth rotation with gradient fade
+  Block Size: 6 LEDs bright, 12 LEDs fade zone
+  Speed: 25ms per frame (smooth, fast rotation)
+  Use Case: High-speed racing, maximum visibility
+
+MODE 2: Purple-Yellow Fading Blocks (PWM: 1250-1499µs)
+  Description: Color blocks rotate SEAMLESSLY and morph between purple and yellow
+  Pattern: 6-LED blocks alternating between colors on 36-LED virtual ring
+  Colors: Purple (128, 0, 255) ↔ Yellow (255, 255, 0)
+  Brightness: 50% constant (battery efficient)
+  Animation: Blocks rotate seamlessly across strip boundary while colors fade/morph
+  Rotation Speed: 50ms per frame
+  Fade Cycle: 1000ms (1 second for full color transition)
+  Use Case: Freestyle flying, visually interesting, seamless wrap
+  Special: Both strips treated as one continuous ring (no visible seam)
+
+MODE 3: Rainbow Scroll (PWM: 1500-1749µs)
+  Description: FAST scrolling rainbow with color shifting across both strips
+  Pattern: Full spectrum displayed as continuous 36-LED ring
+  Colors: Complete rainbow (all hues 0-255)
+  Brightness: 78% (HSV value = 200)
+  Animation: Rainbow scrolls FAST while colors continuously shift
+  Hue Spacing: 7 per LED (creates visible rainbow spread)
+  Speed: 7ms per frame (143 fps - ultra-smooth, 2x faster than v1.1!)
+  Use Case: High visibility, party mode, orientation via color position, spectacular effect
+  Special: Combines scrolling + color morphing for dynamic effect
+
+MODE 4: Police Lights (PWM: 1750-2000µs)
+  Description: Red/blue emergency light pattern
+  Pattern: Adapted for 18 LEDs (7+4+7 sections)
+  Colors: Red (178, 0, 0) / Blue (0, 0, 178) / White (178, 178, 178)
+  Brightness: 100% with high/low intensity variations
+  Animation: 8-stage cycle with color inversions
+  Sections: 
+    - First 7 LEDs: Alternating red/blue halves
+    - Middle 4 LEDs: White strobe
+    - Last 7 LEDs: Inverse of first section
+  Strip 2: Colors inverted from Strip 1
+  Speed: 22ms per stage (fast emergency effect)
+  Use Case: Attention-getting, locating drone after crash
+
+--------------------------------------------------------------------------------
+MEMORY USAGE ANALYSIS
+--------------------------------------------------------------------------------
+LED Arrays:          108 bytes  (36 LEDs × 3 bytes RGB)
+Mode 1 State:          5 bytes  (offset, timer)
+Mode 2 State:          9 bytes  (offset, timer, fade progress, fade timer)
+Mode 3 State:          5 bytes  (rainbow hue, timer)
+Mode 4 State:          5 bytes  (stage, timer)
+Mode 4 PROGMEM:        8 bytes  (flash memory, not RAM)
+FastLED Overhead:   ~186 bytes  (actual from compilation)
+Stack/Runtime:       ~36 bytes  (actual from compilation)
+-----------------------------------------------------
+ACTUAL TOTAL:        350 bytes  (68% of 512 bytes) ✓ EXCELLENT
+FREE RAM:            162 bytes  (32% remaining)
+
+Flash Usage: 7,304 bytes (89% of 8,192 bytes) ✓ GOOD
+
+--------------------------------------------------------------------------------
+POWER CONSUMPTION ESTIMATES
+--------------------------------------------------------------------------------
+Mode 1: Medium-High (yellow at 70%/30%, constant on)
+Mode 2: Medium (50% brightness, efficient)
+Mode 3: Low-Medium (pulsing 20%-78%, efficient)
+Mode 4: High (100% brightness with strobing)
+
+Battery Life Impact: Modes 2 and 3 most efficient for longer flights
+
+--------------------------------------------------------------------------------
+TESTING NOTES
+--------------------------------------------------------------------------------
+□ Compile successful: _____ (date)
+□ Upload successful: _____ (date)
+□ Sanity test passed: _____ (date)
+□ Mode 1 verified: _____ (spinning smooth, colors correct)
+□ Mode 2 verified: _____ (fade smooth, rotation visible)
+□ Mode 3 verified: _____ (heartbeat effect clear, opposite phases)
+□ Mode 4 verified: _____ (emergency pattern working)
+□ PWM ranges tested: _____ (all transitions clean)
+□ Memory usage confirmed: _____ bytes RAM
+□ Customer approval: _____ (date)
+
+--------------------------------------------------------------------------------
+CUSTOMER FEEDBACK
+--------------------------------------------------------------------------------
+Initial Request: Yellow spinning blocks, purple/yellow fading, heartbeat pulse
+
+Customizations Made:
+- Mode 1: Implemented seamless ring animation treating both strips as one
+- Mode 2: Added smooth color morphing between blocks
+- Mode 3: Created alternating pulse showcasing drone colors
+- Mode 4: Standard police lights adapted for 18 LEDs
+
+Customer Approval Status: PENDING
+Delivery Date: _____
+Warranty Period: _____
+
+--------------------------------------------------------------------------------
+INSTALLATION NOTES
+--------------------------------------------------------------------------------
+Wiring:
+  - Red wire (5V) → Battery + (through BEC)
+  - Black wire (GND) → Battery -
+  - Yellow wire → Front strip data (18 LEDs)
+  - White wire → Rear strip data (18 LEDs)
+  - Blue wire → Radio channel PWM signal
+
+PWM Channel Configuration:
+  - Radio channel: _____ (to be determined by customer)
+  - Switch type: 4-position or continuous knob
+  - Recommended: Auxiliary channel with switch
+
+First Flight Checklist:
+  □ Test all 4 modes on bench before flight
+  □ Verify PWM signal connection
+  □ Check LED strip polarity and connections
+  □ Ensure adequate power supply (BEC rating)
+  □ Test sanity mode (PB3 pin to ground)
+
+--------------------------------------------------------------------------------
+SUPPORT CONTACT
+--------------------------------------------------------------------------------
+Firmware File: yellow_purple_75mm_led_controller.ino
+Location: customers/2025_01_yellow_purple_75mm/
+Build Date: 2025-11-01
+Builder: [Your Name]
+Contact: [Your Email/Phone]
+
+================================================================================
+END CUSTOMER NOTES
+================================================================================
