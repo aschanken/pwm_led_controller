@@ -1,5 +1,7 @@
 # PWM LED Controller v5.4
 
+Firmware for the ATTiny85 IC to modularly drive WS2812B LEDs and switch programs based on a PWM input.
+
 Bespoke ATtiny85-20PU firmware template for racing drone WS2812B LED lighting systems.
 
 ## Overview
